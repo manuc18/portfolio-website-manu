@@ -163,14 +163,6 @@ export default function Portfolio() {
   ]
 
   const [profilePhoto, setProfilePhoto] = useState("/manu-portrait.jpg")
-  const [isAdmin, setIsAdmin] = useState(false)
-  const [adminPassword, setAdminPassword] = useState("")
-  const [showAdminPanel, setShowAdminPanel] = useState(false)
-  const [newReading, setNewReading] = useState<Partial<ResearchReading>>({})
-  const [newBook, setNewBook] = useState<Partial<BookEntry>>({})
-
-  const [researchReadingsState, setResearchReadings] = useState(researchReadings)
-  const [booksState, setBooks] = useState(books)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -222,49 +214,7 @@ export default function Portfolio() {
     ref.current?.scrollIntoView({ behavior: "smooth" })
   }
 
-  const handleAdminLogin = (password: string) => {
-    if (password === "admin2025") {
-      setIsAdmin(true)
-      setShowAdminPanel(true)
-      setAdminPassword("")
-    }
-  }
 
-  const handleAddReading = () => {
-    if (newReading.title && newReading.keyInsights) {
-      const reading: ResearchReading = {
-        id: Date.now().toString(),
-        title: newReading.title || "",
-        authors: newReading.authors || "",
-        type: newReading.type || "paper",
-        url: newReading.url,
-        keyInsights: newReading.keyInsights || "",
-        visibility: newReading.visibility || "private",
-        createdDate: new Date().toISOString().split("T")[0],
-        handwrittenNotesUrl: newReading.handwrittenNotesUrl,
-        youtubeEmbed: newReading.youtubeEmbed,
-      }
-      setResearchReadings([...researchReadingsState, reading])
-      setNewReading({})
-    }
-  }
-
-  const handleAddBook = () => {
-    if (newBook.title && newBook.author) {
-      const book: BookEntry = {
-        id: Date.now().toString(),
-        title: newBook.title || "",
-        author: newBook.author || "",
-        summary: newBook.summary || "",
-        keyTakeaways: newBook.keyTakeaways || [],
-        personalInsights: newBook.personalInsights || "",
-        whyRead: newBook.whyRead || "",
-        visible: newBook.visible !== false,
-      }
-      setBooks([...booksState, book])
-      setNewBook({})
-    }
-  }
 
   return (
     <div
@@ -544,79 +494,12 @@ export default function Portfolio() {
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-12">
             <h2 className="font-mono text-3xl sm:text-4xl font-bold">RESEARCH READING & INSIGHTS</h2>
-            {isAdmin && (
-              <button
-                onClick={() => setShowAdminPanel(!showAdminPanel)}
-                className={`px-3 py-1 text-xs font-mono border rounded ${isDarkMode ? "border-gray-600 text-gray-400 hover:text-white" : "border-gray-400 text-gray-600 hover:text-black"}`}
-              >
-                {showAdminPanel ? "HIDE" : "EDIT"}
-              </button>
-            )}
           </div>
-
-          {/* Admin Panel */}
-          {isAdmin && showAdminPanel && (
-            <div
-              className={`p-6 border rounded mb-12 ${isDarkMode ? "border-gray-800 bg-gray-950/50" : "border-gray-200 bg-gray-50/50"}`}
-            >
-              <h3 className="font-mono text-sm font-bold mb-6">ADD NEW RESEARCH READING</h3>
-              <div className="space-y-4">
-                <input
-                  type="text"
-                  placeholder="Paper/Article Title"
-                  value={newReading.title || ""}
-                  onChange={(e) => setNewReading({ ...newReading, title: e.target.value })}
-                  className={`w-full px-3 py-2 border rounded font-mono text-sm ${isDarkMode ? "bg-black border-gray-700 text-white" : "bg-white border-gray-300 text-black"}`}
-                />
-                <input
-                  type="text"
-                  placeholder="Authors"
-                  value={newReading.authors || ""}
-                  onChange={(e) => setNewReading({ ...newReading, authors: e.target.value })}
-                  className={`w-full px-3 py-2 border rounded font-mono text-sm ${isDarkMode ? "bg-black border-gray-700 text-white" : "bg-white border-gray-300 text-black"}`}
-                />
-                <input
-                  type="url"
-                  placeholder="URL (optional)"
-                  value={newReading.url || ""}
-                  onChange={(e) => setNewReading({ ...newReading, url: e.target.value })}
-                  className={`w-full px-3 py-2 border rounded font-mono text-sm ${isDarkMode ? "bg-black border-gray-700 text-white" : "bg-white border-gray-300 text-black"}`}
-                />
-                <textarea
-                  placeholder="Key Insights"
-                  value={newReading.keyInsights || ""}
-                  onChange={(e) => setNewReading({ ...newReading, keyInsights: e.target.value })}
-                  className={`w-full px-3 py-2 border rounded font-mono text-sm ${isDarkMode ? "bg-black border-gray-700 text-white" : "bg-white border-gray-300 text-black"} h-20`}
-                />
-                <input
-                  type="text"
-                  placeholder="YouTube Embed URL (optional)"
-                  value={newReading.youtubeEmbed || ""}
-                  onChange={(e) => setNewReading({ ...newReading, youtubeEmbed: e.target.value })}
-                  className={`w-full px-3 py-2 border rounded font-mono text-sm ${isDarkMode ? "bg-black border-gray-700 text-white" : "bg-white border-gray-300 text-black"}`}
-                />
-                <select
-                  value={newReading.visibility || "private"}
-                  onChange={(e) => setNewReading({ ...newReading, visibility: e.target.value as "private" | "public" })}
-                  className={`w-full px-3 py-2 border rounded font-mono text-sm ${isDarkMode ? "bg-black border-gray-700 text-white" : "bg-white border-gray-300 text-black"}`}
-                >
-                  <option value="private">Private (Only Me)</option>
-                  <option value="public">Public</option>
-                </select>
-                <button
-                  onClick={handleAddReading}
-                  className={`w-full px-4 py-2 font-mono text-sm border rounded transition-colors ${isDarkMode ? "border-gray-600 text-gray-400 hover:border-white hover:text-white" : "border-gray-400 text-gray-600 hover:border-black hover:text-black"}`}
-                >
-                  ADD READING
-                </button>
-              </div>
-            </div>
-          )}
 
           {/* Display Research Readings */}
           <div className="grid md:grid-cols-2 gap-6">
-            {researchReadingsState
-              .filter((r) => r.visibility === "public" || isAdmin)
+            {researchReadings
+              .filter((r) => r.visibility === "public")
               .map((reading) => (
                 <div
                   key={reading.id}
@@ -624,11 +507,6 @@ export default function Portfolio() {
                 >
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="font-mono font-bold">{reading.title}</h3>
-                    {reading.visibility === "private" && isAdmin && (
-                      <span className="text-xs font-mono px-2 py-1 bg-red-500/20 text-red-400 border border-red-500/30 rounded">
-                        PRIVATE
-                      </span>
-                    )}
                   </div>
                   <p className={`font-mono text-xs mb-3 ${isDarkMode ? "text-gray-500" : "text-gray-600"}`}>
                     {reading.authors}
@@ -658,20 +536,12 @@ export default function Portfolio() {
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-12">
             <h2 className="font-mono text-3xl sm:text-4xl font-bold">BOOKS & READING</h2>
-            {isAdmin && (
-              <button
-                onClick={() => setShowAdminPanel(!showAdminPanel)}
-                className={`px-3 py-1 text-xs font-mono border rounded ${isDarkMode ? "border-gray-600 text-gray-400 hover:text-white" : "border-gray-400 text-gray-600 hover:text-black"}`}
-              >
-                {showAdminPanel ? "HIDE" : "EDIT"}
-              </button>
-            )}
           </div>
 
           {/* Display Books */}
           <div className="space-y-6">
-            {booksState
-              .filter((b) => b.visible || isAdmin)
+            {books
+              .filter((b) => b.visible)
               .map((book) => (
                 <div
                   key={book.id}
@@ -684,11 +554,6 @@ export default function Portfolio() {
                         by {book.author}
                       </p>
                     </div>
-                    {!book.visible && isAdmin && (
-                      <span className="text-xs font-mono px-2 py-1 bg-red-500/20 text-red-400 border border-red-500/30 rounded">
-                        HIDDEN
-                      </span>
-                    )}
                   </div>
                   <p className={`text-sm mb-4 leading-relaxed ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
                     {book.summary}
@@ -881,27 +746,7 @@ export default function Portfolio() {
         </div>
       )}
 
-      {/* Admin Login Modal */}
-      {!isAdmin && (
-        <div
-          className={`fixed bottom-4 right-4 z-40 ${isDarkMode ? "bg-gray-950 border-gray-800" : "bg-white border-gray-200"} border rounded p-4`}
-        >
-          <input
-            type="password"
-            placeholder="Admin password"
-            value={adminPassword}
-            onChange={(e) => setAdminPassword(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleAdminLogin(adminPassword)}
-            className={`font-mono text-xs px-2 py-1 border rounded ${isDarkMode ? "bg-black border-gray-700 text-white" : "bg-white border-gray-300 text-black"} mb-2 w-full`}
-          />
-          <button
-            onClick={() => handleAdminLogin(adminPassword)}
-            className={`w-full px-2 py-1 text-xs font-mono border rounded transition-colors ${isDarkMode ? "border-gray-600 text-gray-400 hover:border-white hover:text-white" : "border-gray-400 text-gray-600 hover:border-black hover:text-black"}`}
-          >
-            LOGIN
-          </button>
-        </div>
-      )}
+
 
       <script
         suppressHydrationWarning
