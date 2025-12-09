@@ -313,7 +313,6 @@ export default function Portfolio() {
         <div
           className={`h-full ${isDarkMode ? "bg-white" : "bg-black"} transition-all duration-300`}
           id="progress-bar"
-          style={{ width: "0%" }}
         />
       </div>
 
