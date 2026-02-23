@@ -4,7 +4,7 @@ Personal portfolio website showcasing projects, research, and professional exper
 
 ## Live Demo
 
-View the live portfolio at: [https://manu-vahan-portfolio.vercel.app](https://manu-vahan-portfolio.vercel.app)
+View the live portfolio at: [https://manu-vahan-portfolio.vercel.app](https://portfolio-website-manu.netlify.app/)
 
 ---
 
