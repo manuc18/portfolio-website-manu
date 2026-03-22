@@ -289,7 +289,7 @@ export default function Portfolio() {
           </div>
 
           <p className="text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto">
-            I read books, I read people, and I write my self.
+            I read books, I listen people, and I write my self.
           </p>
 
           <div className={`font-mono text-sm ${isDarkMode ? "text-gray-500" : "text-gray-600"} h-6`}>
