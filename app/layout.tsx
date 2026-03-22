@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   keywords: "Full Stack Engineer, AI Researcher, Disha AI, UPSC, Education, Healthcare AI, Network Security",
   openGraph: {
     title: "Manu Vahan — Full Stack Engineer Intern @ Disha AI",
-    description: "I read books, I read people, and I write my self. AI for education, healthcare, and security.",
+    description: "I read books, I listen people, and I write my self. AI for education, healthcare, and security.",
     type: "website",
   },
   robots: {
