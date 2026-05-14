@@ -646,6 +646,14 @@ export default function Portfolio() {
               <Linkedin className="w-4 h-4" />
               <span>LinkedIn</span>
             </a>
+            <a
+              href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0Dc2_5nb81IZm4eF6_hppDLHqVwjuk8-Tj7acy3lvaOm-rSH1MMaU7ni47rQJVBy9kkLwRKR25?gv=true"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-mono font-semibold transition-colors ${isDarkMode ? "bg-sky-600 text-white hover:bg-sky-500" : "bg-sky-500 text-white hover:bg-sky-600"}`}
+            >
+              Book an appointment
+            </a>
           </div>
 
           <p className={`font-mono text-xs ${isDarkMode ? "text-gray-400" : "text-gray-300"}`}>
