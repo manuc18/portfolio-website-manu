@@ -56,9 +56,17 @@ export default function ContactPage() {
       document.body.appendChild(scriptTag)
     }
 
+    // Hide fallback after 3 seconds if widget hasn't loaded
+    const timeout = setTimeout(() => {
+      if (bookingButtonRef.current?.children.length === 0) {
+        setShowBookingFallback(false)
+      }
+    }, 3000)
+
     window.addEventListener("load", onLoad)
     return () => {
       window.removeEventListener("load", onLoad)
+      clearTimeout(timeout)
       if (scriptTag) scriptTag.removeEventListener("load", onLoad)
     }
   }, [])
@@ -112,8 +120,7 @@ export default function ContactPage() {
           </div>
 
           <div className={`p-4 rounded ${isDarkMode ? "border border-gray-800 bg-gray-950/40" : "border border-gray-200 bg-gray-50/80"}`}>
-            <div ref={bookingButtonRef} className="inline-flex" />
-            {showBookingFallback && (
+            {showBookingFallback ? (
               <a
                 href={bookingUrl}
                 target="_blank"
@@ -121,6 +128,8 @@ export default function ContactPage() {
                 className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-mono font-semibold transition-colors ${isDarkMode ? "bg-sky-600 text-white hover:bg-sky-500" : "bg-sky-500 text-white hover:bg-sky-600"}`}>
                 Book an appointment
               </a>
+            ) : (
+              <div ref={bookingButtonRef} />
             )}
           </div>
         </div>
