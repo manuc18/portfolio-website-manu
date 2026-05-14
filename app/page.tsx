@@ -63,12 +63,14 @@ export default function Portfolio() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [labelSuffix, setLabelSuffix] = useState("EXE")
   const [showCursor, setShowCursor] = useState(true)
+  const [showBookingFallback, setShowBookingFallback] = useState(true)
   const homeRef = useRef<HTMLElement>(null)
   const aboutRef = useRef<HTMLElement>(null)
   const workRef = useRef<HTMLElement>(null)
   const projectsRef = useRef<HTMLElement>(null)
   const blogRef = useRef<HTMLElement>(null)
   const contactRef = useRef<HTMLElement>(null)
+  const bookingButtonRef = useRef<HTMLDivElement>(null)
 
   const interests: Interest[] = [
     { label: "Music", value: "Classical vocal & flute", icon: "🎵" },
@@ -209,6 +211,59 @@ export default function Portfolio() {
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [activeSection])
+
+  useEffect(() => {
+    const cssHref = "https://calendar.google.com/calendar/scheduling-button-script.css"
+    const jsSrc = "https://calendar.google.com/calendar/scheduling-button-script.js"
+
+    const loadBookingButton = () => {
+      const bookingEl = bookingButtonRef.current
+      const calendar = (window as any).calendar
+      if (!bookingEl || !calendar?.schedulingButton?.load) return
+
+      try {
+        calendar.schedulingButton.load({
+          url: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ0Dc2_5nb81IZm4eF6_hppDLHqVwjuk8-Tj7acy3lvaOm-rSH1MMaU7ni47rQJVBy9kkLwRKR25?gv=true",
+          color: "#039BE5",
+          label: "Book an appointment",
+          target: bookingEl,
+        })
+        setShowBookingFallback(false)
+      } catch (error) {
+        console.error("Google Calendar booking button failed to load:", error)
+      }
+    }
+
+    let styleTag = document.querySelector<HTMLLinkElement>(`link[href="${cssHref}"]`)
+    if (!styleTag) {
+      styleTag = document.createElement("link")
+      styleTag.rel = "stylesheet"
+      styleTag.href = cssHref
+      document.head.appendChild(styleTag)
+    }
+
+    let scriptTag = document.querySelector<HTMLScriptElement>(`script[src="${jsSrc}"]`)
+    const onLoad = () => loadBookingButton()
+
+    if (scriptTag) {
+      scriptTag.addEventListener("load", onLoad)
+      if ((window as any).calendar?.schedulingButton?.load) {
+        loadBookingButton()
+      }
+    } else {
+      scriptTag = document.createElement("script")
+      scriptTag.src = jsSrc
+      scriptTag.async = true
+      scriptTag.addEventListener("load", onLoad)
+      document.body.appendChild(scriptTag)
+    }
+
+    window.addEventListener("load", onLoad)
+    return () => {
+      window.removeEventListener("load", onLoad)
+      if (scriptTag) scriptTag.removeEventListener("load", onLoad)
+    }
+  }, [])
 
   const scrollToSection = (ref: React.RefObject<HTMLElement>) => {
     ref.current?.scrollIntoView({ behavior: "smooth" })
@@ -646,14 +701,19 @@ export default function Portfolio() {
               <Linkedin className="w-4 h-4" />
               <span>LinkedIn</span>
             </a>
-            <a
-              href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0Dc2_5nb81IZm4eF6_hppDLHqVwjuk8-Tj7acy3lvaOm-rSH1MMaU7ni47rQJVBy9kkLwRKR25?gv=true"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-mono font-semibold transition-colors ${isDarkMode ? "bg-sky-600 text-white hover:bg-sky-500" : "bg-sky-500 text-white hover:bg-sky-600"}`}
-            >
-              Book an appointment
-            </a>
+            <div className={`p-4 rounded ${isDarkMode ? "border border-gray-800 bg-gray-950/40" : "border border-gray-200 bg-gray-50/80"}`}>
+              <div ref={bookingButtonRef} className="inline-flex" />
+              {showBookingFallback && (
+                <a
+                  href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0Dc2_5nb81IZm4eF6_hppDLHqVwjuk8-Tj7acy3lvaOm-rSH1MMaU7ni47rQJVBy9kkLwRKR25?gv=true"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-mono font-semibold transition-colors ${isDarkMode ? "bg-sky-600 text-white hover:bg-sky-500" : "bg-sky-500 text-white hover:bg-sky-600"}`}
+                >
+                  Book an appointment
+                </a>
+              )}
+            </div>
           </div>
 
           <p className={`font-mono text-xs ${isDarkMode ? "text-gray-400" : "text-gray-300"}`}>
